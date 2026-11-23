@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Career Navigator | Discover Your Future</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+
+        <a href="/" class="logo">
+            <span class="logo-icon">✦</span>
+            <span>Career<span class="logo-highlight">Navigator</span></span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle"
+                aria-label="Toggle navigation"
+                aria-expanded="false">
+            ☰
+        </button>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="/login" class="login-btn">Login</a>
+            <a href="/register" class="signup-btn">Get Started →</a>
+        </div>
+
+    </header>
+
+
+    <!-- Hero Section -->
+    <main>
+
+        <section class="hero" id="home">
+
+            <div class="hero-content">
+
+                <div class="hero-label">
+                    <span class="status-dot"></span>
+                    AI-POWERED CAREER GUIDANCE
+                </div>
+
+                <h1>
+                    Your Future,<br>
+                    <span>Our Intelligence.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Discover career paths that match your skills,
+                    interests and potential. Get personalized
+                    recommendations and build a roadmap towards
+                    your dream career.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="/register" class="primary-btn">
+                        Explore Your Career <span>→</span>
+                    </a>
+
+                    <a href="#how-it-works" class="secondary-btn">
+                        How It Works
+                    </a>
+                </div>
+
+                <div class="hero-trust">
+                    <span>✓ Personalized guidance</span>
+                    <span>✓ Skill gap analysis</span>
+                    <span>✓ Learning roadmaps</span>
+                </div>
+
+            </div>
+
+
+            <!-- Hero Illustration -->
+            <div class="hero-visual">
+
+                <div class="visual-glow"></div>
+
+                <div class="career-card">
+
+                    <div class="card-top">
+                        <div>
+                            <span class="small-label">CAREER INSIGHTS</span>
+                            <h3>Your Potential</h3>
+                        </div>
+
+                        <span class="card-icon">✦</span>
+                    </div>
+
+                    <div class="career-circle">
+                        <div class="circle-inner">
+                            <span>AI</span>
+                            <small>POWERED</small>
+                        </div>
+                    </div>
+
+                    <div class="insight-item">
+                        <span class="insight-icon purple">✧</span>
+                        <div>
+                            <strong>Career Discovery</strong>
+                            <small>Explore your possibilities</small>
+                        </div>
+                        <span class="arrow">↗</span>
+                    </div>
+
+                    <div class="insight-item">
+                        <span class="insight-icon blue">⌘</span>
+                        <div>
+                            <strong>Skill Development</strong>
+                            <small>Find your learning gaps</small>
+                        </div>
+                        <span class="arrow">↗</span>
+                    </div>
+
+                    <div class="insight-item">
+                        <span class="insight-icon green">✓</span>
+                        <div>
+                            <strong>Personal Roadmap</strong>
+                            <small>Build your future step by step</small>
+                        </div>
+                        <span class="arrow">↗</span>
+                    </div>
+
+                </div>
+
+                <div class="floating-tag">
+                    <span>✦</span> Discover your potential
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+
+            <div class="section-heading">
+                <span class="section-label">WHAT WE OFFER</span>
+
+                <h2>
+                    Everything You Need to<br>
+                    <span>Shape Your Career</span>
+                </h2>
+
+                <p>
+                    Smart career guidance designed to help you
+                    make informed decisions about your future.
+                </p>
+            </div>
+
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon purple-bg">◎</div>
+
+                    <h3>Career Recommendations</h3>
+
+                    <p>
+                        Discover suitable career paths by analyzing
+                        your academic background, interests and skills.
+                    </p>
+
+                    <span class="feature-link">Explore careers →</span>
+                </div>
+
+
+                <div class="feature-card">
+                    <div class="feature-icon blue-bg">⌘</div>
+
+                    <h3>Aptitude Assessment</h3>
+
+                    <p>
+                        Understand your logical reasoning,
+                        analytical thinking and problem-solving abilities.
+                    </p>
+
+                    <span class="feature-link">Discover strengths →</span>
+                </div>
+
+
+                <div class="feature-card">
+                    <div class="feature-icon green-bg">◈</div>
+
+                    <h3>Skill Gap Analysis</h3>
+
+                    <p>
+                        Compare your current skills with career
+                        requirements and identify what you need to learn.
+                    </p>
+
+                    <span class="feature-link">Analyze skills →</span>
+                </div>
+
+
+                <div class="feature-card">
+                    <div class="feature-icon orange-bg">▤</div>
+
+                    <h3>Learning Roadmaps</h3>
+
+                    <p>
+                        Get structured learning plans with topics,
+                        practical projects and learning resources.
+                    </p>
+
+                    <span class="feature-link">Build your roadmap →</span>
+                </div>
+
+
+                <div class="feature-card">
+                    <div class="feature-icon pink-bg">✧</div>
+
+                    <h3>AI Career Counselor</h3>
+
+                    <p>
+                        Ask career-related questions and receive
+                        guidance about skills, roles and opportunities.
+                    </p>
+
+                    <span class="feature-link">Get guidance →</span>
+                </div>
+
+
+                <div class="feature-card">
+                    <div class="feature-icon cyan-bg">⇄</div>
+
+                    <h3>Career Comparison</h3>
+
+                    <p>
+                        Compare different career options based on
+                        skills, job roles and career opportunities.
+                    </p>
+
+                    <span class="feature-link">Compare careers →</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- How It Works -->
+        <section class="how-section" id="how-it-works">
+
+            <div class="section-heading">
+                <span class="section-label">YOUR JOURNEY</span>
+
+                <h2>
+                    Four Steps to Your <span>Future</span>
+                </h2>
+
+                <p>
+                    Start with understanding yourself and finish
+                    with a personalized career roadmap.
+                </p>
+            </div>
+
+
+            <div class="steps-grid">
+
+                <div class="step-card">
+                    <span class="step-number">01</span>
+                    <h3>Create Your Profile</h3>
+                    <p>Share your education, interests, skills and goals.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">02</span>
+                    <h3>Take Assessment</h3>
+                    <p>Complete an aptitude assessment to understand your strengths.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">03</span>
+                    <h3>Discover Careers</h3>
+                    <p>Explore career recommendations based on your profile.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">04</span>
+                    <h3>Build Your Roadmap</h3>
+                    <p>Identify missing skills and track your learning progress.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+
+            <div class="cta-content">
+                <span class="section-label">YOUR JOURNEY STARTS TODAY</span>
+
+                <h2>
+                    Don't Just Dream About Your Future.
+                    <span>Build It.</span>
+                </h2>
+
+                <p>
+                    Take the first step towards understanding your
+                    potential and exploring your career opportunities.
+                </p>
+
+                <a href="/register" class="cta-btn">
+                    Get Started For Free →
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <a href="/" class="logo">
+            <span class="logo-icon">✦</span>
+            <span>Career<span class="logo-highlight">Navigator</span></span>
+        </a>
+
+        <p>
+            AI-Powered Student Career Navigator
+        </p>
+
+        <p class="copyright">
+            © <span id="currentYear"></span> Career Navigator.
+            Built for students, powered by intelligence.
+        </p>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Gap Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+
+            <div>
+                <h2>AI Career Navigator</h2>
+                <p>Skill Gap Analysis</p>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="logout-button">
+                Dashboard
+            </a>
+
+        </header>
+
+        <!-- Page Welcome -->
+        <section class="dashboard-welcome">
+
+            <h1>Your Skill Gap Analysis</h1>
+
+            <p>
+                Review your career recommendations and current skill levels.
+            </p>
+
+        </section>
+
+        <!-- Career Recommendations -->
+        <section class="dashboard-profile">
+
+            <h2>Career Recommendations</h2>
+
+            <p>
+                <strong>Rule-Based Recommendation:</strong>
+                {{ recommended_career }}
+            </p>
+
+            <p>
+                <strong>ML Model Prediction:</strong>
+                {{ ml_recommended_career }}
+            </p>
+
+            <p>
+                <em>
+                    Note: ML prediction is based on a sample training
+                    dataset and is intended for project demonstration.
+                </em>
+            </p>
+
+        </section>
+
+        <!-- Career Readiness -->
+        <section class="dashboard-profile">
+
+            <h2>Career Skill Readiness</h2>
+
+            <h1>{{ readiness }}%</h1>
+
+            <p>
+                Your estimated readiness based on your selected
+                skill levels and project target levels.
+            </p>
+
+        </section>
+
+        <!-- Skill Gap Details -->
+        <section class="dashboard-profile">
+
+            <h2>Skill Gap Details</h2>
+
+            {% for item in skill_gaps %}
+
+                <div class="skill-gap-item">
+
+                    <h3>{{ item.name }}</h3>
+
+                    <p>
+                        Current Level:
+                        <strong>
+                            {{ item.current_level.title() }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        Required Level:
+                        <strong>
+                            {{ item.required_level.title() }}
+                        </strong>
+                    </p>
+
+                    <p>
+                        Status:
+                        <strong>{{ item.status }}</strong>
+                    </p>
+
+                </div>
+
+                <hr>
+
+            {% endfor %}
+
+        </section>
+
+        <!-- Understanding Your Result -->
+        <section class="dashboard-profile">
+
+            <h2>Understanding Your Result</h2>
+
+            <p>
+                <strong>Needs Improvement:</strong>
+                Your current level is below the target.
+            </p>
+
+            <p>
+                <strong>Meets Target:</strong>
+                Your current level matches the target.
+            </p>
+
+            <p>
+                <strong>Above Target:</strong>
+                Your current level is higher than the target.
+            </p>
+
+            <p>
+                <em>
+                    Note: These are illustrative project benchmarks.
+                    Skill levels are self-reported and do not certify
+                    actual ability.
+                </em>
+            </p>
+
+        </section>
+
+        <!-- Back to Dashboard -->
+        <a href="{{ url_for('dashboard') }}"
+           class="dashboard-action-btn">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

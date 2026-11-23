@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personalized Learning Roadmap</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+            <div>
+                <h2>AI Career Navigator</h2>
+                <p>Personalized Learning Roadmap</p>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="logout-button">
+                Dashboard
+            </a>
+        </header>
+
+        <section class="dashboard-welcome">
+            <h1>Your Learning Roadmap</h1>
+            <p>Improve your skills step by step.</p>
+        </section>
+
+        {% if roadmap %}
+
+            {% for item in roadmap %}
+
+                <section class="dashboard-profile">
+
+                    <h2>{{ item.skill }}</h2>
+
+                    <p>
+                        Current Level:
+                        <strong>{{ item.current_level }}</strong>
+                    </p>
+
+                    <p>
+                        Estimated Duration:
+                        <strong>{{ item.duration }}</strong>
+                    </p>
+
+                    <h3>Topics to Learn</h3>
+
+                    <ul>
+                        {% for topic in item.topics %}
+                            <li>{{ topic }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <h3>Practical Project</h3>
+
+                    <p>{{ item.project }}</p>
+
+                </section>
+
+            {% endfor %}
+
+        {% else %}
+
+            <section class="dashboard-profile">
+                <h2>Great Job!</h2>
+                <p>
+                    No improvement areas were identified
+                    in the currently supported roadmap skills.
+                </p>
+            </section>
+
+        {% endif %}
+
+        <a href="{{ url_for('dashboard') }}"
+           class="dashboard-action-btn">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

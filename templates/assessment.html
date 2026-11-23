@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="assessment-container">
+        <h1>Career Assessment</h1>
+        <p>Answer these questions honestly to discover suitable career paths.</p>
+
+        <form method="POST" action="{{ url_for('assessment') }}">
+
+            {% for question in questions %}
+            <div class="assessment-question">
+                <h3>{{ loop.index }}. {{ question.question }}</h3>
+
+                {% for option in question.options %}
+                <label>
+                    <input type="radio"
+                           name="q{{ question.id }}"
+                           value="{{ option.value }}"
+                           required>
+                    {{ option.label }}
+                </label>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit">Submit Assessment</button>
+        </form>
+    </div>
+
+</body>
+</html>
+

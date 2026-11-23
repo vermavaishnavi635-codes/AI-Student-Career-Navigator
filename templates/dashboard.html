@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | AI Career Navigator</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Header -->
+        <header class="dashboard-header">
+
+            <div>
+                <h2>AI Career Navigator</h2>
+                <p>Student Dashboard</p>
+            </div>
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-button">
+                Logout
+            </a>
+
+        </header>
+
+        <!-- Welcome Section -->
+        <section class="dashboard-welcome">
+
+            <h1>Welcome, {{ student.name }}! 👋</h1>
+
+            <p>
+                Let's explore your career opportunities
+                and build your future.
+            </p>
+
+        </section>
+
+        <!-- Student Profile -->
+        <section class="dashboard-profile">
+
+            <h2>Your Profile</h2>
+
+            <p><strong>Name:</strong> {{ student.name }}</p>
+
+            <p><strong>Email:</strong> {{ student.email }}</p>
+
+            <p>
+                <strong>Education:</strong>
+                {{ student.education or "Not provided" }}
+            </p>
+
+            <p>
+                <strong>Course:</strong>
+                {{ student.course or "Not provided" }}
+            </p>
+
+            <p>
+                <strong>Interests:</strong>
+                {{ student.interests or "Not provided" }}
+            </p>
+
+        </section>
+
+        <!-- Dashboard Features -->
+        <section class="dashboard-features">
+
+            <h2>Explore Your Career</h2>
+
+            <!-- Career Assessment -->
+            <div class="dashboard-card">
+
+                <h3>Career Assessment</h3>
+
+                <p>
+                    Discover your interests, strengths
+                    and suitable career paths.
+                </p>
+
+                <a href="{{ url_for('assessment') }}"
+                   class="dashboard-action-btn">
+                    Start Assessment
+                </a>
+
+            </div>
+
+            <!-- Skills Assessment -->
+            <div class="dashboard-card">
+
+                <h3>Skills Assessment</h3>
+
+                <p>
+                    Evaluate your current skills
+                    and proficiency level.
+                </p>
+
+                <a href="{{ url_for('skills_assessment') }}"
+                   class="dashboard-action-btn">
+                    Start Skills Assessment
+                </a>
+
+            </div>
+
+            <!-- Career Recommendations -->
+            <div class="dashboard-card">
+
+                <h3>Career Recommendations</h3>
+
+                <p>
+                    Explore suitable career options
+                    based on your interests and skills.
+                </p>
+
+                <a href="{{ url_for('assessment_result') }}"
+                   class="dashboard-action-btn">
+                    View Recommendations
+                </a>
+
+            </div>
+
+            <!-- Learning Roadmap -->
+            <div class="dashboard-card">
+
+                <h3>Learning Roadmap</h3>
+
+                <p>
+                    Follow a personalized learning plan
+                    to improve your skills.
+                </p>
+
+                <a href="{{ url_for('learning_roadmap') }}"
+                   class="dashboard-action-btn">
+                    View Learning Roadmap
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+</html>

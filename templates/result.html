@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+            <div>
+                <h2>AI Career Navigator</h2>
+                <p>Career Assessment Result</p>
+            </div>
+            <a href="{{ url_for('dashboard') }}" class="logout-button">
+                Dashboard
+            </a>
+        </header>
+
+        <section class="dashboard-welcome">
+            <h1>Your Career Assessment Result 🎉</h1>
+            <p>Here is your interest-based career recommendation.</p>
+        </section>
+
+        <section class="dashboard-profile">
+            <h2>Recommended Career Category</h2>
+            <h1>{{ recommended_career }}</h1>
+            <p>This recommendation is based on your assessment answers.</p>
+        </section>
+
+        <section class="dashboard-profile">
+            <h2>Your Assessment Scores</h2>
+
+            {% for category, score in scores.items() %}
+                <p><strong>{{ category }}:</strong> {{ score }}%</p>
+            {% endfor %}
+        </section>
+
+        <section class="dashboard-profile">
+            <h2>Next Step</h2>
+            <p>Use this result to explore suitable careers and identify the skills you need to develop.</p>
+            <a href="{{ url_for('dashboard') }}" class="dashboard-action-btn">
+                Back to Dashboard
+            </a>
+        </section>
+
+    </div>
+
+</body>
+</html>

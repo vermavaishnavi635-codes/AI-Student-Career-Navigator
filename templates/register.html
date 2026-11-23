@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Career Navigator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- LEFT BRANDING SECTION -->
+        <section class="auth-brand">
+
+            <a href="/" class="auth-logo">
+                <span class="auth-logo-icon">✦</span>
+                CareerNavigator
+            </a>
+
+            <div class="auth-brand-content">
+
+                <div class="auth-badge">
+                    ✦ AI-POWERED CAREER GUIDANCE
+                </div>
+
+                <h1>
+                    Your Future<br>
+                    Starts <span>Here.</span>
+                </h1>
+
+                <p>
+                    Every great career begins with a single step.
+                    Discover your strengths, explore opportunities
+                    and create your personalized learning journey.
+                </p>
+
+                <div class="auth-highlight-card">
+
+                    <div class="auth-highlight-icon">✧</div>
+
+                    <h3>Discover Your Potential</h3>
+
+                    <p>
+                        Personalized career recommendations
+                        based on your unique profile.
+                    </p>
+
+                    <div class="auth-progress">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="auth-brand-footer">
+                © 2026 Career Navigator
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT REGISTRATION SECTION -->
+        <section class="auth-form-section">
+
+            <div class="auth-form-wrapper">
+
+                <a href="/" class="back-home">
+                    ← Back to Home
+                </a>
+
+                <div class="auth-form-heading">
+                    <h2>Create Your Account</h2>
+
+                    <p>
+                        Start your personalized career journey today.
+                    </p>
+                </div>
+
+
+                <!-- FLASH MESSAGES -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    {% if messages %}
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}"
+                                 role="alert">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endwith %}
+
+
+                <!-- REGISTRATION FORM -->
+                <form action="{{ url_for('register') }}"
+                      method="POST"
+                      class="register-form">
+
+                    <div class="form-group">
+
+                        <label for="name">Full Name *</label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your full name"
+                            maxlength="100"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">Email Address *</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="student@example.com"
+                            maxlength="120"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="password">Password *</label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Minimum 8 characters"
+                                minlength="8"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="confirm_password">
+                                Confirm Password *
+                            </label>
+
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                name="confirm_password"
+                                placeholder="Confirm password"
+                                minlength="8"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="age">Age</label>
+
+                            <input
+                                type="number"
+                                id="age"
+                                name="age"
+                                placeholder="Your age"
+                                min="13"
+                                max="100"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="education">Education</label>
+
+                            <select id="education" name="education">
+
+                                <option value="">
+                                    Select Education
+                                </option>
+
+                                <option value="12th">
+                                    12th
+                                </option>
+
+                                <option value="Diploma">
+                                    Diploma
+                                </option>
+
+                                <option value="B.Tech">
+                                    B.Tech
+                                </option>
+
+                                <option value="BCA">
+                                    BCA
+                                </option>
+
+                                <option value="B.Sc">
+                                    B.Sc
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="course">Course / Branch</label>
+
+                        <input
+                            type="text"
+                            id="course"
+                            name="course"
+                            placeholder="e.g. Computer Science (AI & ML)"
+                            maxlength="100"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="interests">Career Interests</label>
+
+                        <textarea
+                            id="interests"
+                            name="interests"
+                            rows="3"
+                            placeholder="e.g. Artificial Intelligence, Web Development, Data Science"
+                        ></textarea>
+
+                    </div>
+
+
+                    <button type="submit" class="auth-submit-btn">
+                        Create Account →
+                    </button>
+
+
+                    <p class="auth-login-text">
+                        Already have an account?
+                        <a href="/login">Login here</a>
+                    </p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+</html>
