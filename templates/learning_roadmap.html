@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,62 +6,368 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Personalized Learning Roadmap</title>
+    <title>Personalized Learning Roadmap | AI Career Navigator</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f0f8f7;
+            color: #142d3a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .roadmap-container {
+            width: 92%;
+            max-width: 1150px;
+            margin: 35px auto;
+        }
+
+        .roadmap-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .roadmap-header h2 {
+            margin: 0;
+            color: #142d3a;
+        }
+
+        .roadmap-header p {
+            margin: 7px 0 0;
+            color: #647987;
+        }
+
+        .header-btn {
+            background: #142d3a;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .header-btn:hover {
+            background: #244b5c;
+        }
+
+        .roadmap-intro {
+            background: linear-gradient(135deg, #0f9d91, #087c73);
+            color: white;
+            padding: 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+        }
+
+        .roadmap-intro h1 {
+            margin: 0 0 12px;
+            font-size: 30px;
+        }
+
+        .roadmap-intro p {
+            margin: 0;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        .roadmap-count {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .roadmap-card {
+            background: white;
+            border: 1px solid #e1eeec;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 18px rgba(20, 45, 58, 0.06);
+        }
+
+        .skill-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding-bottom: 17px;
+            border-bottom: 1px solid #e8f0ef;
+        }
+
+        .skill-heading h2 {
+            margin: 0;
+            font-size: 23px;
+            color: #142d3a;
+        }
+
+        .skill-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+            background: #e2f5f2;
+            color: #087c73;
+            border-radius: 50%;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .skill-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 18px 0 22px;
+        }
+
+        .meta-badge {
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #e2f5f2;
+            color: #087c73;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .duration-badge {
+            background: #edf1fa;
+            color: #4058a5;
+        }
+
+        .roadmap-section h3 {
+            margin: 0 0 15px;
+            font-size: 17px;
+            color: #142d3a;
+        }
+
+        .topic-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 11px;
+        }
+
+        .topic-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 12px 14px;
+            background: #f6fbfa;
+            border-radius: 8px;
+            color: #526874;
+            line-height: 1.5;
+        }
+
+        .topic-check {
+            color: #0f9d91;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .project-box {
+            margin-top: 23px;
+            padding: 18px;
+            background: #f0f8f7;
+            border-left: 4px solid #0f9d91;
+            border-radius: 9px;
+        }
+
+        .project-box h3 {
+            margin: 0 0 9px;
+            color: #087c73;
+            font-size: 17px;
+        }
+
+        .project-box p {
+            margin: 0;
+            color: #526874;
+            line-height: 1.7;
+        }
+
+        .empty-card {
+            background: white;
+            text-align: center;
+            padding: 45px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(20, 45, 58, 0.06);
+        }
+
+        .empty-card h2 {
+            color: #087c73;
+        }
+
+        .empty-card p {
+            color: #647987;
+            line-height: 1.6;
+        }
+
+        .bottom-action {
+            text-align: center;
+            margin: 30px 0 45px;
+        }
+
+        .bottom-btn {
+            display: inline-block;
+            padding: 13px 25px;
+            background: #0f9d91;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        .bottom-btn:hover {
+            background: #087c73;
+        }
+
+        @media (max-width: 600px) {
+            .roadmap-container {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            .roadmap-intro {
+                padding: 23px;
+            }
+
+            .roadmap-intro h1 {
+                font-size: 24px;
+            }
+
+            .roadmap-card {
+                padding: 18px;
+            }
+
+            .skill-heading h2 {
+                font-size: 20px;
+            }
+
+            .header-btn,
+            .bottom-btn {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="dashboard-container">
+    <main class="roadmap-container">
 
-        <header class="dashboard-header">
+        <!-- Header -->
+        <header class="roadmap-header">
+
             <div>
                 <h2>AI Career Navigator</h2>
                 <p>Personalized Learning Roadmap</p>
             </div>
 
-            <a href="{{ url_for('dashboard') }}"
-               class="logout-button">
-                Dashboard
+            <a href="{{ url_for('dashboard') }}" class="header-btn">
+                Back to Dashboard
             </a>
+
         </header>
 
-        <section class="dashboard-welcome">
+
+        <!-- Introduction -->
+        <section class="roadmap-intro">
+
             <h1>Your Learning Roadmap</h1>
-            <p>Improve your skills step by step.</p>
+
+            <p>
+                Build your skills step by step with a structured
+                learning plan. Explore important topics, practice
+                through projects and work towards your career goals.
+            </p>
+
+            {% if roadmap %}
+                <span class="roadmap-count">
+                    {{ roadmap|length }} Learning Areas
+                </span>
+            {% endif %}
+
         </section>
 
+
+        <!-- Roadmap Cards -->
         {% if roadmap %}
 
             {% for item in roadmap %}
 
-                <section class="dashboard-profile">
+                <section class="roadmap-card">
 
-                    <h2>{{ item.skill }}</h2>
+                    <div class="skill-heading">
 
-                    <p>
-                        Current Level:
-                        <strong>{{ item.current_level }}</strong>
-                    </p>
+                        <h2>
+                            <span class="skill-number">
+                                {{ loop.index }}
+                            </span>
+                            {{ item.skill }}
+                        </h2>
 
-                    <p>
-                        Estimated Duration:
-                        <strong>{{ item.duration }}</strong>
-                    </p>
+                    </div>
 
-                    <h3>Topics to Learn</h3>
 
-                    <ul>
-                        {% for topic in item.topics %}
-                            <li>{{ topic }}</li>
-                        {% endfor %}
-                    </ul>
+                    <!-- Skill Information -->
+                    <div class="skill-meta">
 
-                    <h3>Practical Project</h3>
+                        <span class="meta-badge">
+                            Current Level: {{ item.current_level }}
+                        </span>
 
-                    <p>{{ item.project }}</p>
+                        <span class="meta-badge duration-badge">
+                            Duration: {{ item.duration }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Topics -->
+                    <div class="roadmap-section">
+
+                        <h3>Topics to Learn</h3>
+
+                        <ul class="topic-list">
+
+                            {% for topic in item.topics %}
+
+                                <li>
+                                    <span class="topic-check">✓</span>
+                                    <span>{{ topic }}</span>
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- Practical Project -->
+                    <div class="project-box">
+
+                        <h3>Practical Project</h3>
+
+                        <p>{{ item.project }}</p>
+
+                    </div>
 
                 </section>
 
@@ -68,22 +375,33 @@
 
         {% else %}
 
-            <section class="dashboard-profile">
+            <section class="empty-card">
+
                 <h2>Great Job!</h2>
+
                 <p>
-                    No improvement areas were identified
-                    in the currently supported roadmap skills.
+                    No improvement areas were identified in the
+                    currently supported roadmap skills.
+
+                    Continue practicing your existing skills
+                    to maintain your progress.
                 </p>
+
             </section>
 
         {% endif %}
 
-        <a href="{{ url_for('dashboard') }}"
-           class="dashboard-action-btn">
-            Back to Dashboard
-        </a>
 
-    </div>
+        <!-- Bottom Navigation -->
+        <div class="bottom-action">
+
+            <a href="{{ url_for('dashboard') }}" class="bottom-btn">
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </main>
 
 </body>
 </html>

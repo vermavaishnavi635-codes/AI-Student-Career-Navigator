@@ -1,36 +1,29 @@
 
 import os
 import json
-from career_engine import predict_career
+
 from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    flash
+    Flask, render_template, request,
+    redirect, url_for, flash
 )
 
 from werkzeug.security import (
-    generate_password_hash,
-    check_password_hash
+    generate_password_hash, check_password_hash
+)
+
+from flask_login import (
+    LoginManager, login_user, login_required,
+    logout_user, current_user
 )
 
 from database import db
 from models import Student, AssessmentResult, SkillAssessment
-
-from flask_login import (
-    LoginManager,
-    login_user,
-    login_required,
-    logout_user,
-    current_user
-)
+from career_engine import predict_top_careers
 
 
-# =========================
-# INITIALIZE FLASK
-# =========================
+# ==========================================
+# FLASK CONFIGURATION
+# ==========================================
 
 app = Flask(__name__)
 
@@ -50,9 +43,9 @@ app.config["SECRET_KEY"] = os.environ.get(
 db.init_app(app)
 
 
-# =========================
+# ==========================================
 # LOGIN MANAGER
-# =========================
+# ==========================================
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -66,18 +59,18 @@ def load_user(user_id):
     return db.session.get(Student, int(user_id))
 
 
-# =========================
+# ==========================================
 # HOMEPAGE
-# =========================
+# ==========================================
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# =========================
-# STUDENT REGISTRATION
-# =========================
+# ==========================================
+# REGISTRATION
+# ==========================================
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -132,20 +125,16 @@ def register():
             flash("Please enter an age between 13 and 100.", "error")
             return redirect(url_for("register"))
 
-    existing_student = Student.query.filter_by(
-        email=email
-    ).first()
+    existing_student = Student.query.filter_by(email=email).first()
 
     if existing_student:
         flash("This email is already registered.", "error")
         return redirect(url_for("register"))
 
-    hashed_password = generate_password_hash(password)
-
     new_student = Student(
         name=name,
         email=email,
-        password=hashed_password,
+        password=generate_password_hash(password),
         age=age,
         education=education or None,
         course=course or None,
@@ -163,13 +152,12 @@ def register():
         return redirect(url_for("register"))
 
     flash("Account created successfully!", "success")
-
     return redirect(url_for("register"))
 
 
-# =========================
-# STUDENT LOGIN
-# =========================
+# ==========================================
+# LOGIN
+# ==========================================
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -191,42 +179,39 @@ def login():
         return redirect(url_for("dashboard"))
 
     flash("Invalid email or password.", "error")
-
     return redirect(url_for("login"))
 
 
-# =========================
-# STUDENT DASHBOARD
-# =========================
+# ==========================================
+# DASHBOARD
+# ==========================================
 
 @app.route("/dashboard")
 @login_required
 def dashboard():
-
     return render_template(
         "dashboard.html",
         student=current_user
     )
 
 
-# =========================
-# STUDENT LOGOUT
-# =========================
+# ==========================================
+# LOGOUT
+# ==========================================
 
 @app.route("/logout")
 @login_required
 def logout():
 
     logout_user()
-
     flash("You have been logged out.", "success")
 
     return redirect(url_for("login"))
 
 
-# =========================
+# ==========================================
 # CAREER ASSESSMENT QUESTIONS
-# =========================
+# ==========================================
 
 CAREER_QUESTIONS = [
 
@@ -240,7 +225,6 @@ CAREER_QUESTIONS = [
             {"label": "Helping and teaching people", "value": "people"}
         ]
     },
-
     {
         "id": 2,
         "question": "Which subject interests you most?",
@@ -251,7 +235,6 @@ CAREER_QUESTIONS = [
             {"label": "Psychology and Biology", "value": "people"}
         ]
     },
-
     {
         "id": 3,
         "question": "What type of problems do you like solving?",
@@ -262,7 +245,6 @@ CAREER_QUESTIONS = [
             {"label": "People-related problems", "value": "people"}
         ]
     },
-
     {
         "id": 4,
         "question": "Which task sounds most interesting?",
@@ -273,7 +255,6 @@ CAREER_QUESTIONS = [
             {"label": "Guiding a team", "value": "people"}
         ]
     },
-
     {
         "id": 5,
         "question": "Which skill would you like to improve?",
@@ -284,7 +265,6 @@ CAREER_QUESTIONS = [
             {"label": "Communication", "value": "people"}
         ]
     },
-
     {
         "id": 6,
         "question": "Which work environment do you prefer?",
@@ -295,7 +275,6 @@ CAREER_QUESTIONS = [
             {"label": "Educational or social organization", "value": "people"}
         ]
     },
-
     {
         "id": 7,
         "question": "What do you enjoy doing in your free time?",
@@ -306,7 +285,6 @@ CAREER_QUESTIONS = [
             {"label": "Helping others", "value": "people"}
         ]
     },
-
     {
         "id": 8,
         "question": "Which project would you choose?",
@@ -317,7 +295,6 @@ CAREER_QUESTIONS = [
             {"label": "Organizing a learning program", "value": "people"}
         ]
     },
-
     {
         "id": 9,
         "question": "Which strength describes you best?",
@@ -328,7 +305,6 @@ CAREER_QUESTIONS = [
             {"label": "Empathy", "value": "people"}
         ]
     },
-
     {
         "id": 10,
         "question": "Which tool would you prefer to work with?",
@@ -339,7 +315,6 @@ CAREER_QUESTIONS = [
             {"label": "Teaching and communication tools", "value": "people"}
         ]
     },
-
     {
         "id": 11,
         "question": "How do you approach a difficult task?",
@@ -350,7 +325,6 @@ CAREER_QUESTIONS = [
             {"label": "Discuss it with others", "value": "people"}
         ]
     },
-
     {
         "id": 12,
         "question": "Which achievement would make you happiest?",
@@ -361,7 +335,6 @@ CAREER_QUESTIONS = [
             {"label": "Making a positive difference to people", "value": "people"}
         ]
     },
-
     {
         "id": 13,
         "question": "Which role sounds most appealing?",
@@ -372,7 +345,6 @@ CAREER_QUESTIONS = [
             {"label": "Teacher or Trainer", "value": "people"}
         ]
     },
-
     {
         "id": 14,
         "question": "What motivates you most?",
@@ -383,7 +355,6 @@ CAREER_QUESTIONS = [
             {"label": "Supporting others", "value": "people"}
         ]
     },
-
     {
         "id": 15,
         "question": "What kind of career would you prefer?",
@@ -398,9 +369,9 @@ CAREER_QUESTIONS = [
 ]
 
 
-# =========================
-# CAREER ASSESSMENT ROUTE
-# =========================
+# ==========================================
+# CAREER ASSESSMENT
+# ==========================================
 
 @app.route("/assessment", methods=["GET", "POST"])
 @login_required
@@ -410,12 +381,9 @@ def assessment():
 
         answers = {}
 
-        # Validate all answers
         for question in CAREER_QUESTIONS:
 
-            answer = request.form.get(
-                f"q{question['id']}"
-            )
+            answer = request.form.get(f"q{question['id']}")
 
             valid_options = [
                 option["value"]
@@ -423,22 +391,13 @@ def assessment():
             ]
 
             if answer not in valid_options:
-
-                flash(
-                    "Please answer all questions correctly.",
-                    "error"
-                )
-
+                flash("Please answer all questions correctly.", "error")
                 return redirect(url_for("assessment"))
 
             answers[f"q{question['id']}"] = answer
 
-        # Calculate category scores
         categories = [
-            "technology",
-            "design",
-            "business",
-            "people"
+            "technology", "design", "business", "people"
         ]
 
         counts = {
@@ -459,13 +418,11 @@ def assessment():
             for category in categories
         }
 
-        # Find highest scoring career category
         recommended_career = max(
             counts,
             key=counts.get
         ).title()
 
-        # Save assessment result
         result = AssessmentResult(
             student_id=current_user.id,
             answers=json.dumps(answers),
@@ -474,33 +431,18 @@ def assessment():
         )
 
         try:
-
             db.session.add(result)
             db.session.commit()
 
         except Exception:
-
             db.session.rollback()
-
-            app.logger.exception(
-                "Assessment saving failed"
-            )
-
-            flash(
-                "Unable to save assessment. Please try again.",
-                "error"
-            )
-
+            app.logger.exception("Assessment saving failed")
+            flash("Unable to save assessment. Please try again.", "error")
             return redirect(url_for("assessment"))
 
-        flash(
-            "Assessment submitted successfully!",
-            "success"
-        )
+        flash("Assessment submitted successfully!", "success")
 
-        return redirect(
-            url_for("assessment_result")
-        )
+        return redirect(url_for("assessment_result"))
 
     return render_template(
         "assessment.html",
@@ -508,15 +450,14 @@ def assessment():
     )
 
 
-# =========================
+# ==========================================
 # CAREER ASSESSMENT RESULT
-# =========================
+# ==========================================
 
 @app.route("/assessment-result")
 @login_required
 def assessment_result():
 
-    # Get latest assessment of logged-in student
     result = AssessmentResult.query.filter_by(
         student_id=current_user.id
     ).order_by(
@@ -524,15 +465,9 @@ def assessment_result():
     ).first()
 
     if result is None:
-
-        flash(
-            "Please complete your assessment first.",
-            "error"
-        )
-
+        flash("Please complete your assessment first.", "error")
         return redirect(url_for("assessment"))
 
-    # Convert saved JSON scores into Python dictionary
     scores = json.loads(result.scores)
 
     return render_template(
@@ -542,10 +477,9 @@ def assessment_result():
     )
 
 
-# =========================
+# ==========================================
 # SKILLS ASSESSMENT
-# =========================
-
+# ==========================================
 
 @app.route("/skills-assessment", methods=["GET", "POST"])
 @login_required
@@ -562,23 +496,28 @@ def skills_assessment():
         return redirect(url_for("assessment"))
 
     career_skills = {
+
         "Technology": [
             "Python", "SQL", "Problem Solving",
             "Data Structures", "Web Development"
         ],
+
         "Design": [
             "Creativity", "UI/UX Design",
             "Graphic Design", "Figma",
             "Visual Communication"
         ],
+
         "Business": [
             "Business Analysis", "Communication",
             "Excel", "Problem Solving", "Decision Making"
         ],
+
         "People": [
             "Communication", "Leadership",
             "Teamwork", "Teaching", "Problem Solving"
         ]
+
     }
 
     recommended_career = result.recommended_career
@@ -596,7 +535,9 @@ def skills_assessment():
 
             level = request.form.get(skill)
 
-            if level not in ["beginner", "intermediate", "advanced"]:
+            if level not in [
+                "beginner", "intermediate", "advanced"
+            ]:
                 flash("Please select a level for every skill.", "error")
                 return redirect(url_for("skills_assessment"))
 
@@ -618,7 +559,6 @@ def skills_assessment():
             return redirect(url_for("skills_assessment"))
 
         flash("Skills assessment submitted successfully!", "success")
-
         return redirect(url_for("skill_result"))
 
     return render_template(
@@ -628,13 +568,9 @@ def skills_assessment():
     )
 
 
-# =========================
-# SKILL RESULT PAGE
-# =========================
-
-# =========================
-# SKILL GAP ANALYSIS
-# =========================
+# ==========================================
+# SKILL RESULT + TOP 3 ML RECOMMENDATIONS
+# ==========================================
 
 @app.route("/skill-result")
 @login_required
@@ -661,11 +597,22 @@ def skill_result():
         return redirect(url_for("assessment"))
 
     student_skills = json.loads(saved_skills.skills)
-    ml_recommended_career = predict_career(student_skills)
+
+    # ML recommendations
+    try:
+        ml_recommendations = predict_top_careers(
+            student_skills,
+            top_n=3
+        )
+    except Exception:
+        app.logger.exception("ML recommendation failed")
+        ml_recommendations = []
+
+    # Rule-based recommendation
     recommended_career = career_result.recommended_career
 
-    # Required skill levels for each career
     required_skill_levels = {
+
         "Technology": {
             "Python": "intermediate",
             "SQL": "intermediate",
@@ -673,6 +620,7 @@ def skill_result():
             "Data Structures": "intermediate",
             "Web Development": "intermediate"
         },
+
         "Design": {
             "Creativity": "advanced",
             "UI/UX Design": "intermediate",
@@ -680,6 +628,7 @@ def skill_result():
             "Figma": "intermediate",
             "Visual Communication": "intermediate"
         },
+
         "Business": {
             "Business Analysis": "intermediate",
             "Communication": "advanced",
@@ -687,6 +636,7 @@ def skill_result():
             "Problem Solving": "advanced",
             "Decision Making": "intermediate"
         },
+
         "People": {
             "Communication": "advanced",
             "Leadership": "intermediate",
@@ -694,6 +644,7 @@ def skill_result():
             "Teaching": "intermediate",
             "Problem Solving": "intermediate"
         }
+
     }
 
     level_scores = {
@@ -721,10 +672,8 @@ def skill_result():
 
         if current_score < required_score:
             status = "Needs Improvement"
-
         elif current_score == required_score:
             status = "Meets Target"
-
         else:
             status = "Above Target"
 
@@ -746,14 +695,16 @@ def skill_result():
     return render_template(
         "skill_result.html",
         skills=student_skills,
-        recommended_career=career_result.recommended_career,
+        recommended_career=recommended_career,
         skill_gaps=skill_gaps,
         readiness=readiness,
-         ml_recommended_career=ml_recommended_career
+        ml_recommendations=ml_recommendations
     )
-# =========================
+
+
+# ==========================================
 # LEARNING ROADMAP
-# =========================
+# ==========================================
 
 @app.route("/learning-roadmap")
 @login_required
@@ -772,40 +723,57 @@ def learning_roadmap():
     student_skills = json.loads(saved_skills.skills)
 
     roadmap_data = {
+
         "Python": {
-            "topics": ["Python Basics", "Functions", "OOP", "File Handling"],
+            "topics": [
+                "Python Basics", "Functions", "OOP", "File Handling"
+            ],
             "project": "Build a Student Management System",
             "duration": "7 Days"
         },
+
         "SQL": {
-            "topics": ["SELECT", "WHERE", "JOINS", "GROUP BY"],
+            "topics": [
+                "SELECT", "WHERE", "JOINS", "GROUP BY"
+            ],
             "project": "Build a Student Database",
             "duration": "5 Days"
         },
+
         "Problem Solving": {
-            "topics": ["Logic Building", "Basic Algorithms", "Practice Problems"],
+            "topics": [
+                "Logic Building", "Basic Algorithms", "Practice Problems"
+            ],
             "project": "Solve 20 Coding Problems",
             "duration": "7 Days"
         },
+
         "Data Structures": {
-            "topics": ["Arrays", "Lists", "Stacks", "Queues"],
+            "topics": [
+                "Arrays", "Lists", "Stacks", "Queues"
+            ],
             "project": "Build a Data Structures Practice Program",
             "duration": "7 Days"
         },
+
         "Web Development": {
-            "topics": ["HTML", "CSS", "JavaScript", "Flask"],
+            "topics": [
+                "HTML", "CSS", "JavaScript", "Flask"
+            ],
             "project": "Build a Personal Portfolio Website",
             "duration": "7 Days"
         }
+
     }
 
     roadmap = []
 
     for skill, level in student_skills.items():
 
-        if level == "beginner" or level == "intermediate":
+        if level in ["beginner", "intermediate"]:
 
             if skill in roadmap_data:
+
                 roadmap.append({
                     "skill": skill,
                     "current_level": level.title(),
@@ -819,9 +787,10 @@ def learning_roadmap():
         roadmap=roadmap
     )
 
-# =========================
-# RUN FLASK APPLICATION
-# =========================
+
+# ==========================================
+# RUN APPLICATION
+# ==========================================
 
 if __name__ == "__main__":
 

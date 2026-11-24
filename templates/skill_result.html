@@ -1,160 +1,543 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Assessment Results | AI Career Navigator</title>
 
-    <title>Skill Gap Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f0f8f7;
+            color: #142d3a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .result-container {
+            width: 92%;
+            max-width: 1150px;
+            margin: 35px auto;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .result-header h1 {
+            margin: 0;
+            color: #142d3a;
+            font-size: 30px;
+        }
+
+        .result-header p {
+            margin: 8px 0 0;
+            color: #647987;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 20px;
+            border-radius: 8px;
+            background: #0f9d91;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #087c73;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #142d3a;
+        }
+
+        .btn-secondary:hover {
+            background: #244b5c;
+        }
+
+        .result-card {
+            background: #ffffff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(20, 45, 58, 0.07);
+        }
+
+        .section-title {
+            margin: 0 0 20px;
+            color: #142d3a;
+            font-size: 22px;
+        }
+
+        .recommended-career {
+            background: linear-gradient(135deg, #0f9d91, #087c73);
+            color: white;
+            padding: 28px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .recommended-career p {
+            margin: 0 0 10px;
+            opacity: 0.9;
+        }
+
+        .recommended-career h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+.recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    align-items: stretch;
+}
+
+.career-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    position: relative;
+    transform: none;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #e1eeec;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 3px 12px rgba(20, 45, 58, 0.05);
+    overflow: hidden;
+}
+       
+
+        .career-rank {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #e2f5f2;
+            color: #087c73;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 13px;
+        }
+
+        .career-card h3 {
+    font-size: 18px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+        .probability-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+        .probability-row strong {
+            color: #087c73;
+        }
+
+        .progress-bar {
+    display: block;
+    width: 100%;
+    height: 11px;
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+        .progress-bar::-webkit-progress-bar {
+            background: #e7efee;
+            border-radius: 20px;
+        }
+
+        .progress-bar::-webkit-progress-value {
+            background: #0f9d91;
+            border-radius: 20px;
+        }
+
+        .progress-bar::-moz-progress-bar {
+            background: #0f9d91;
+            border-radius: 20px;
+        }
+
+        .readiness-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #087c73;
+            margin-bottom: 12px;
+        }
+
+        .readiness-description {
+            color: #647987;
+            margin: 12px 0 0;
+            line-height: 1.6;
+        }
+
+        .skill-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .skill-item {
+            padding: 17px;
+            border: 1px solid #e1eeec;
+            border-radius: 10px;
+            background: #fbfefd;
+        }
+
+        .skill-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            color: #142d3a;
+        }
+
+        .skill-level {
+            color: #647987;
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-needs {
+            background: #fff0d9;
+            color: #9a5b00;
+        }
+
+        .status-meets {
+            background: #e2f5f2;
+            color: #087c73;
+        }
+
+        .status-above {
+            background: #e8edff;
+            color: #4058a5;
+        }
+
+        .explanation {
+            background: #f0f8f7;
+            border-left: 4px solid #0f9d91;
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.7;
+            color: #526874;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0 40px;
+        }
+
+        .disclaimer {
+            margin-top: 18px;
+            color: #7b8d96;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .empty-message {
+            color: #647987;
+            padding: 15px 0;
+        }
+
+        @media (max-width: 850px) {
+            .recommendation-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .result-container {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            .result-header h1 {
+                font-size: 24px;
+            }
+
+            .result-card {
+                padding: 18px;
+            }
+
+            .recommendation-grid {
+                grid-template-columns: minmax(0,1fr);
+            }
+
+            .recommended-career h2 {
+                font-size: 23px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="dashboard-container">
+    <main class="result-container">
 
-        <!-- Header -->
-        <header class="dashboard-header">
-
+        <!-- Page Header -->
+        <header class="result-header">
             <div>
-                <h2>AI Career Navigator</h2>
-                <p>Skill Gap Analysis</p>
+                <h1>Skill Assessment Results</h1>
+                <p>Your skills analysis and career recommendations</p>
             </div>
 
-            <a href="{{ url_for('dashboard') }}"
-               class="logout-button">
-                Dashboard
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                Back to Dashboard
             </a>
-
         </header>
 
-        <!-- Page Welcome -->
-        <section class="dashboard-welcome">
 
-            <h1>Your Skill Gap Analysis</h1>
+        <!-- Rule-Based Recommended Career -->
+        <section class="recommended-career">
+            <p>Your Career Assessment Recommendation</p>
 
-            <p>
-                Review your career recommendations and current skill levels.
-            </p>
-
+            <h2>{{ recommended_career }}</h2>
         </section>
 
-        <!-- Career Recommendations -->
-        <section class="dashboard-profile">
 
-            <h2>Career Recommendations</h2>
+        <!-- Top 3 ML Career Recommendations -->
+        <section class="result-card">
 
-            <p>
-                <strong>Rule-Based Recommendation:</strong>
-                {{ recommended_career }}
-            </p>
+            <h2 class="section-title">
+                Top 3 Career Recommendations
+            </h2>
 
-            <p>
-                <strong>ML Model Prediction:</strong>
-                {{ ml_recommended_career }}
-            </p>
+            {% if ml_recommendations %}
 
-            <p>
-                <em>
-                    Note: ML prediction is based on a sample training
-                    dataset and is intended for project demonstration.
-                </em>
-            </p>
+                <div class="recommendation-grid">
 
-        </section>
+                    {% for item in ml_recommendations %}
 
-        <!-- Career Readiness -->
-        <section class="dashboard-profile">
+                        <article class="career-card">
 
-            <h2>Career Skill Readiness</h2>
+                            <span class="career-rank">
+                                Rank #{{ loop.index }}
+                            </span>
 
-            <h1>{{ readiness }}%</h1>
+                            <h3>{{ item.career }}</h3>
 
-            <p>
-                Your estimated readiness based on your selected
-                skill levels and project target levels.
-            </p>
+                            <div class="probability-row">
+                                <span>Model Score</span>
+                                <strong>
+                                    {{ "%.2f"|format(item.probability|float) }}%
+                                </strong>
+                            </div>
 
-        </section>
+                            <progress
+                                class="progress-bar"
+                                value="{{ item.probability|float }}"
+                                max="100">
+                            </progress>
 
-        <!-- Skill Gap Details -->
-        <section class="dashboard-profile">
+                        </article>
 
-            <h2>Skill Gap Details</h2>
-
-            {% for item in skill_gaps %}
-
-                <div class="skill-gap-item">
-
-                    <h3>{{ item.name }}</h3>
-
-                    <p>
-                        Current Level:
-                        <strong>
-                            {{ item.current_level.title() }}
-                        </strong>
-                    </p>
-
-                    <p>
-                        Required Level:
-                        <strong>
-                            {{ item.required_level.title() }}
-                        </strong>
-                    </p>
-
-                    <p>
-                        Status:
-                        <strong>{{ item.status }}</strong>
-                    </p>
+                    {% endfor %}
 
                 </div>
 
-                <hr>
+            {% else %}
 
-            {% endfor %}
+                <p class="empty-message">
+                    Career recommendations are not available right now.
+                    Please try your skills assessment again.
+                </p>
 
-        </section>
+            {% endif %}
 
-        <!-- Understanding Your Result -->
-        <section class="dashboard-profile">
-
-            <h2>Understanding Your Result</h2>
-
-            <p>
-                <strong>Needs Improvement:</strong>
-                Your current level is below the target.
-            </p>
-
-            <p>
-                <strong>Meets Target:</strong>
-                Your current level matches the target.
-            </p>
-
-            <p>
-                <strong>Above Target:</strong>
-                Your current level is higher than the target.
-            </p>
-
-            <p>
-                <em>
-                    Note: These are illustrative project benchmarks.
-                    Skill levels are self-reported and do not certify
-                    actual ability.
-                </em>
+            <p class="disclaimer">
+                Note: These recommendations are experimental model estimates
+                based on a small synthetic dataset. They are not validated
+                probabilities or guaranteed career outcomes.
             </p>
 
         </section>
 
-        <!-- Back to Dashboard -->
-        <a href="{{ url_for('dashboard') }}"
-           class="dashboard-action-btn">
-            Back to Dashboard
-        </a>
 
-    </div>
+        <!-- Career Readiness -->
+        <section class="result-card">
+
+            <h2 class="section-title">
+                Career Readiness Analysis
+            </h2>
+
+            <div class="readiness-value">
+                {{ readiness }}%
+            </div>
+
+            <progress
+                class="progress-bar"
+                value="{{ readiness|float }}"
+                max="100">
+            </progress>
+
+            <p class="readiness-description">
+                This score represents how closely your current self-reported
+                skills match the target skill levels used in this assessment.
+            </p>
+
+        </section>
+
+
+        <!-- Skill Gap Analysis -->
+        <section class="result-card">
+
+            <h2 class="section-title">
+                Skill Gap Analysis
+            </h2>
+
+            {% if skill_gaps %}
+
+                <div class="skill-list">
+
+                    {% for gap in skill_gaps %}
+
+                        <div class="skill-item">
+
+                            <div class="skill-top">
+
+                                <span class="skill-name">
+                                    {{ gap.name }}
+                                </span>
+
+                                {% if gap.status == "Needs Improvement" %}
+
+                                    <span class="status status-needs">
+                                        Needs Improvement
+                                    </span>
+
+                                {% elif gap.status == "Meets Target" %}
+
+                                    <span class="status status-meets">
+                                        Meets Target
+                                    </span>
+
+                                {% elif gap.status == "Above Target" %}
+
+                                    <span class="status status-above">
+                                        Above Target
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status">
+                                        {{ gap.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="skill-level">
+                                Current Level:
+                                <strong>{{ gap.current_level }}</strong>
+                                &nbsp; | &nbsp;
+                                Required Level:
+                                <strong>{{ gap.required_level }}</strong>
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="empty-message">
+                    No skill gap information is available.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- Result Explanation -->
+        <section class="result-card">
+
+            <h2 class="section-title">
+                What Do These Results Mean?
+            </h2>
+
+            <div class="explanation">
+                Your skill assessment compares your selected skill levels
+                with the target levels defined for the assessment.
+
+                Skills marked as <strong>Needs Improvement</strong> can be
+                your learning priorities.
+
+                Skills marked as <strong>Meets Target</strong> or
+                <strong>Above Target</strong> indicate that your selected
+                levels meet or exceed the defined targets.
+
+                Use these results as guidance while planning your learning.
+            </div>
+
+        </section>
+
+
+        <!-- Navigation Buttons -->
+        <div class="action-buttons">
+
+            <a href="{{ url_for('learning_roadmap') }}" class="btn">
+                View Learning Roadmap
+            </a>
+
+            <a href="{{ url_for('assessment_result') }}" class="btn btn-secondary">
+                View Career Assessment
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                Dashboard
+            </a>
+
+        </div>
+
+    </main>
 
 </body>
 </html>
